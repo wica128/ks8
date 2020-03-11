@@ -33,7 +33,7 @@ volgroup vg-root --pesize=4096 pv.684
 logvol / --fstype="xfs" --size=5120 --label="root" --name=root --vgname=vg-root
 logvol swap --fstype="swap" --recommended --label="swap" --name=swap --vgname=vg-root
 logvol /home --fstype="ext4" --size=2048 --label="home" --name=home --vgname=vg-root
-logvol /tmp --fstype="ext4" --size=512 --label="home" --name=home --vgname=vg-root
+logvol /tmp --fstype="ext4" --size=512 --label="tmp" --name=tmp --vgname=vg-root
 logvol /var --fstype="ext4" --size=4096 --label="log" --name=log --vgname=vg-root
 #logvol /appl --fstype="ext4" --size=1000 --label="appl" --name=appl --vgname=vg-root
 
