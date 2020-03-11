@@ -43,11 +43,11 @@ logvol /var --fstype="ext4" --size=4096 --label="log" --name=log --vgname=vg-roo
 kexec-tools
 ntpstat
 yum-utils
+iptables-services
 #Only needed for RHEL
 #sos
 -NetworkManager*
 -firewalld
--iptables-services
 -open-vm-tools-desktop 
 -iwl7265-firmware 
 -rdma
@@ -79,11 +79,8 @@ echo "alias vim=vi" > /etc/profile.d/vim.sh
 echo "net.ipv6.conf.all.disable_ipv6 = 1"  > /etc/sysctl.d/ipv6.conf
 
 
-yum remove NetworkManager*
 
 # Puppet will manage iptables
-yum remove firewalld
-yum install iptables-services
 systemctl disable iptables
 
 # Disable CAD
@@ -96,4 +93,6 @@ sed -i /etc/sysconfig/selinux -e 's/SELINUX=.*/SELINUX=disabled/'
 sed -i /etc/default/grub -e 's/^GRUB_CMDLINE_LINUX="[^"]*/& elevator=noop net.ifnames=0 biosdevname=0 ipv6.disable=1/'
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
+dnf -y install https://yum.puppetlabs.com/puppet-release-el-8.noarch.rpm
+dnf -y install puppet
 %end
