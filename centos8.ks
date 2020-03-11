@@ -41,7 +41,6 @@ logvol /var --fstype="ext4" --size=4096 --label="log" --name=log --vgname=vg-roo
 @^minimal-environment
 @guest-agents
 kexec-tools
-puppet
 ntpstat
 yum-utils
 #Only needed for RHEL
