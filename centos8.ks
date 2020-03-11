@@ -27,10 +27,13 @@ services --enabled="chronyd"
 # System timezone
 timezone Europe/Amsterdam --isUtc
 # Disk partitioning information
-part pv.684 --fstype="lvmpv" --ondisk=vda --size=19503
+part pv.684 --fstype="lvmpv" --ondisk=vda --grow
 part /boot --fstype="ext4" --ondisk=vda --size=976 --label=boot
 volgroup cl --pesize=4096 pv.684
-logvol / --fstype="xfs" --size=19500 --label="root" --name=root --vgname=cl
+logvol / --fstype="xfs" --size=15000 --label="root" --name=root --vgname=cl
+logvol /home --fstype="xfs" --size=1000 --label="home" --name=home --vgname=cl
+logvol /var/log --fstype="xfs" --size=1000 --label="log" --name=log --vgname=cl
+logvol /appl --fstype="xfs" --size=1000 --label="appl" --name=appl --vgname=cl
 
 %packages
 @^minimal-environment
