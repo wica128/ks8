@@ -1,1 +1,1 @@
-# ks8
+# Kickstart for Centos8
