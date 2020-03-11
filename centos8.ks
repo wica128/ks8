@@ -41,7 +41,17 @@ logvol /var --fstype="ext4" --size=4096 --label="log" --name=log --vgname=vg-roo
 @^minimal-environment
 @guest-agents
 kexec-tools
-
+puppet
+ntpstat
+yum-utils
+#Only needed for RHEL
+#sos
+-NetworkManager*
+-firewalld
+-iptables-services
+-open-vm-tools-desktop 
+-iwl7265-firmware 
+-rdma
 %end
 
 %addon com_redhat_kdump --enable --reserve-mb='auto'
@@ -56,9 +66,35 @@ pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
 %end
 
 %post
+# SSH Key
 mkdir -m0700 /root/.ssh/
 echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTpTdg9yrHiPFroAVd0kBoSErdX/ztP7YpeDlPJnGhZ bofh@dev.null" > /root/.ssh/authorized_keys
 chmod 0600 /root/.ssh/authorized_keys
 restorecon -R /root/.ssh/
+
+# I like vim 
 echo "alias vim=vi" > /etc/profile.d/vim.sh
+
+
+# Disable ipv6
+echo "net.ipv6.conf.all.disable_ipv6 = 1"  > /etc/sysctl.d/ipv6.conf
+
+
+yum remove NetworkManager*
+
+# Puppet will manage iptables
+yum remove firewalld
+yum install iptables-services
+systemctl disable iptables
+
+# Disable CAD
+systemctl mask ctrl-alt-del.target
+
+# Disable selinux :(
+sed -i /etc/sysconfig/selinux -e 's/SELINUX=.*/SELINUX=disabled/'
+
+# Update grub
+sed -i /etc/default/grub -e 's/^GRUB_CMDLINE_LINUX="[^"]*/& elevator=noop net.ifnames=0 biosdevname=0 ipv6.disable=1/'
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
 %end
