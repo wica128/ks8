@@ -33,7 +33,11 @@ chmod -R u+w /tmp/bootcustom
 #cp /path/to/yourks.cfg /tmp/bootcustom/isolinux/ks.cfg
 
 
-sed -i 's/append\ initrd\=initrd.img/append initrd=initrd.img\ ks\=cdrom:\/ks.cfg/' /tmp/bootcustom/isolinux/isolinux.cfg
+sed  -i -e 's/append\ initrd\=initrd.img/append initrd=initrd.img\ ks\=https:\/\/raw.githubusercontent.com\/wica128\/ks8\/master\/centos8.ks/' \
+	-e 's/^timeout.*/timeout 100/' \
+	-e '/menu default/d' \
+	-e '/label linux/a \ \ menu default' \
+	/tmp/bootcustom/isolinux/isolinux.cfg
 
 cd /tmp/bootcustom
 mkisofs -o $OPISO -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "$(blkid $ISOLOC |sed  's/.*LABEL=\"\([a-zA-Z0-9_-]*\).*/\1/')" -R -J -v -T isolinux/. .

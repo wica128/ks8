@@ -2,8 +2,8 @@
 ignoredisk --only-use=vda
 # Partition clearing information
 clearpart --all --initlabel --drives=vda
-# Use graphical install
-graphical
+skipx
+text
 # Keyboard layouts
 keyboard --vckeymap=us --xlayouts='us'
 # System language
@@ -12,6 +12,10 @@ lang en_US.UTF-8
 # Network information
 network  --bootproto=dhcp --device=enp1s0 --ipv6=auto --activate
 network  --hostname=localhost.localdomain
+# Use network installation
+url --url="http://mirror.init7.net/centos/8/BaseOS/x86_64/os/"
+repo --name=appstream --baseurl=http://mirror.init7.net/centos/8/AppStream/x86_64/os/
+
 # Root password
 rootpw --iscrypted $6$9omOOLnWJHfchqXV$wFxSN8ke0GQQh9RkEaOhbZInM5QS3pc59O1t.NNqmCTsuyaKTfpLiTjIbDEuePvzffbNzt.Qh3WuWJBr8hRnC/
 # Run the Setup Agent on first boot
@@ -21,7 +25,7 @@ skipx
 # System services
 services --enabled="chronyd"
 # System timezone
-timezone America/New_York --isUtc
+timezone Europe/Amsterdam --isUtc
 # Disk partitioning information
 part pv.684 --fstype="lvmpv" --ondisk=vda --size=19503
 part /boot --fstype="ext4" --ondisk=vda --size=976 --label=boot
@@ -44,3 +48,10 @@ pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
 pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
 %end
 
+%post
+mkdir -m0700 /root/.ssh/
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTpTdg9yrHiPFroAVd0kBoSErdX/ztP7YpeDlPJnGhZ bofh@dev.null" > /root/.ssh/authorized_keys
+chmod 0600 /root/.ssh/authorized_keys
+restorecon -R /root/.ssh/
+echo "alias vim=vi" > /etc/profile.d/vim.sh
+%end
