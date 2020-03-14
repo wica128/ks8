@@ -1,8 +1,13 @@
 lang en_US
 keyboard us
 timezone Europe/Amsterdam --isUtc
+
+network  --bootproto=dhcp --device=enp1s0 --ipv6=auto --activate
+network  --hostname=ceph-dev.localdomain
+
+
 rootpw $1$nIIshhNp$rG5vMbhjke2K4WNye1qvc. --iscrypted
-user --name=ceph --iscrypted --password=$6$PiTzp/m2i8z0jGcD$O.7xegRncexuBFP5/z/5wNqSJeT3JIT0JliUbnAkd.W2Sa8kyxiBN5FS2ilGfwIsU/ZKqL5Ok8qVGPnsXUq2t/
+user --name=ceph --groups=wheel --iscrypted --password=$6$PiTzp/m2i8z0jGcD$O.7xegRncexuBFP5/z/5wNqSJeT3JIT0JliUbnAkd.W2Sa8kyxiBN5FS2ilGfwIsU/ZKqL5Ok8qVGPnsXUq2t/
 #platform x86, AMD64, or Intel EM64T
 #reboot
 text
@@ -48,10 +53,20 @@ chrony
 
 %post
 mkdir -m0700 /root/.ssh/
-echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTpTdg9yrHiPFroAVd0kBoSErdX/ztP7YpeDlPJnGhZ bofh@dev.null" > /root/.ssh/authorized_keys
+echo "ssh-ed25519 aaaac3nzac1lzdi1nte5aaaaidtptdg9yrhipfroavd0kboserdx/ztp7ypedlpjnghz bofh@dev.null" > /root/.ssh/authorized_keys
 chmod 0600 /root/.ssh/authorized_keys
-restorecon -R /root/.ssh/
+restorecon -r /root/.ssh/
 
+mkdir -m0700 ~ceph/.ssh/
+echo "ssh-ed25519 aaaac3nzac1lzdi1nte5aaaaidtptdg9yrhipfroavd0kboserdx/ztp7ypedlpjnghz bofh@dev.null" > ~ceph/.ssh/authorized_keys
+chmod 0600 ~ceph/.ssh/authorized_keys
+chown ceph:ceph ~ceph/.ssh/authorized_keys
+restorecon -r ~ceph/.ssh/
+su ceph -c "yes ''|ssh-keygen"
+cat ~ceph/.ssh/id_rsa.pub >> ~ceph/.ssh/authorized_keys
+
+
+echo "%wheel	ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/grp_sudo
 echo "alias vim=vi" > /etc/profile.d/vim.sh
 rpm -Uhv https://download.ceph.com/rpm-nautilus/el7/noarch/ceph-release-1-1.el7.noarch.rpm
 yum update -y && sudo yum install ceph-deploy -y
