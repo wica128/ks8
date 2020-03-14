@@ -43,7 +43,7 @@ firstboot --disable
 @^minimal
 @core
 chrony
-
+python-setuptools
 %end
 
 %addon com_redhat_kdump --disable --reserve-mb='auto'
@@ -65,10 +65,14 @@ restorecon -r ~ceph/.ssh/
 su ceph -c "yes ''|ssh-keygen"
 cat ~ceph/.ssh/id_rsa.pub >> ~ceph/.ssh/authorized_keys
 
+#rpm -Uhv https://download.ceph.com/rpm-nautilus/el7/noarch/ceph-release-1-1.el7.noarch.rpm
+#yum update -y && sudo yum install ceph-deploy -y
 
-echo "%wheel	ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/grp_sudo
-echo "alias vim=vi" > /etc/profile.d/vim.sh
-rpm -Uhv https://download.ceph.com/rpm-nautilus/el7/noarch/ceph-release-1-1.el7.noarch.rpm
-yum update -y && sudo yum install ceph-deploy -y
+
+#su ceph -c "mkdir ~/cluster"
+#su ceph -c "cd ~/cluster"
+
+
+
 
 %end
