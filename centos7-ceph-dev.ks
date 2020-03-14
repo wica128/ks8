@@ -2,7 +2,7 @@ lang en_US
 keyboard us
 timezone Europe/Amsterdam --isUtc
 rootpw $1$nIIshhNp$rG5vMbhjke2K4WNye1qvc. --iscrypted
-user --name=ceph --iscrypted -password=$6$PiTzp/m2i8z0jGcD$O.7xegRncexuBFP5/z/5wNqSJeT3JIT0JliUbnAkd.W2Sa8kyxiBN5FS2ilGfwIsU/ZKqL5Ok8qVGPnsXUq2t/ --shell=nologin
+user --name=ceph --iscrypted --password=$6$PiTzp/m2i8z0jGcD$O.7xegRncexuBFP5/z/5wNqSJeT3JIT0JliUbnAkd.W2Sa8kyxiBN5FS2ilGfwIsU/ZKqL5Ok8qVGPnsXUq2t/ --shell=nologin
 #platform x86, AMD64, or Intel EM64T
 #reboot
 text
