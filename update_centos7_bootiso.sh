@@ -40,7 +40,7 @@ sed  -i -e 's/append\ initrd\=initrd.img/append initrd=initrd.img\ ks\=https:\/\
 	/tmp/bootcustom/isolinux/isolinux.cfg
 
 cd /tmp/bootcustom
-mkisofs -o $OPISO -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "$(blkid $ISOLOC |sed  's/.*LABEL=\"\([a-zA-Z0-9_-]*\).*/\1/')" -R -J -v -T isolinux/. .
+mkisofs -o $OPISO -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "$(blkid -o value $ISOLOC|grep CentOS)" -R -J -v -T isolinux/. .
 implantisomd5 $OPISO
 rm -rf /tmp/bootcustom
 
