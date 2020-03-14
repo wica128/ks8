@@ -41,6 +41,6 @@ sed  -i -e 's/append\ initrd\=initrd.img/append initrd=initrd.img\ ks\=https:\/\
 
 cd /tmp/bootcustom
 mkisofs -o $OPISO -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "$(blkid -o value $ISOLOC|grep CentOS)" -R -J -v -T isolinux/. .
-implantisomd5 $OPISO
+implantisomd5 --force $OPISO
 rm -rf /tmp/bootcustom
 
