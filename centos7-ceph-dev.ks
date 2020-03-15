@@ -44,6 +44,9 @@ firstboot --disable
 @core
 chrony
 python-setuptools
+python36
+#centos-release-ceph-nautilus
+#ceph
 %end
 
 %addon com_redhat_kdump --disable --reserve-mb='auto'
@@ -74,5 +77,6 @@ cat ~ceph/.ssh/id_rsa.pub >> ~ceph/.ssh/authorized_keys
 
 
 
-
+# Really??
+yum -y update
 %end
