@@ -96,4 +96,10 @@ dnf -y install https://yum.puppetlabs.com/puppet-release-el-8.noarch.rpm
 dnf -y install puppet
 puppet resource package puppet ensure=latest
 systemctl enable puppet
+
+# Get cleanup script
+curl -s "https://raw.githubusercontent.com/wica128/ks8/master/seal_template.sh" -o /root/seal_template.sh
+chmod +x /root/seal_template.sh
+
+
 %end
