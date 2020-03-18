@@ -19,9 +19,7 @@ repo --name=appstream --baseurl=http://mirror.init7.net/centos/8/AppStream/x86_6
 # Root password
 rootpw --iscrypted $6$9omOOLnWJHfchqXV$wFxSN8ke0GQQh9RkEaOhbZInM5QS3pc59O1t.NNqmCTsuyaKTfpLiTjIbDEuePvzffbNzt.Qh3WuWJBr8hRnC/
 # Run the Setup Agent on first boot
-firstboot --enable
-# Do not configure the X Window System
-skipx
+#firstboot --enable
 # System services
 services --enabled="chronyd"
 # System timezone
@@ -93,6 +91,9 @@ sed -i /etc/sysconfig/selinux -e 's/SELINUX=.*/SELINUX=disabled/'
 sed -i /etc/default/grub -e 's/^GRUB_CMDLINE_LINUX="[^"]*/& elevator=noop net.ifnames=0 biosdevname=0 ipv6.disable=1/'
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
+# Install puppet client
 dnf -y install https://yum.puppetlabs.com/puppet-release-el-8.noarch.rpm
 dnf -y install puppet
+puppet resource package puppet ensure=latest
+systemctl enable puppet
 %end
